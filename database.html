@@ -1,0 +1,112 @@
+
+Database Connection
+
+<?php
+$servername = "localhost";
+$username = "username";
+$password = "password";
+$dbname = "mydatabase";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+
+Create Table
+
+<?php
+// Create table
+$sql = "CREATE TABLE movies (
+    id INT PRIMARY KEY,
+    title VARCHAR(255),
+    genre VARCHAR(100),
+    release_year INT
+)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Table created successfully";
+} else {
+    echo "Error creating table: " . $conn->error;
+}
+?>
+
+
+Insert Data
+
+<?php
+// Insert data
+$sql = "INSERT INTO movies (id, title, genre, release_year)
+VALUES
+    (1, 'Inception', 'Sci-Fi', 2010),
+    (2, 'The Shawshank Redemption', 'Drama', 1994),
+    (3, 'The Dark Knight', 'Action', 2008)";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Data inserted successfully";
+} else {
+    echo "Error inserting data: " . $conn->error;
+}
+?>
+
+
+Select Data
+
+<?php
+// Select data
+$sql = "SELECT * FROM movies";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        echo "id: " . $row["id"]. " - Title: " . $row["title"]. " - Genre: " . $row["genre"]. " - Release Year: " . $row["release_year"]. "<br>";
+    }
+} else {
+    echo "0 results";
+}
+?>
+
+
+Update Data
+
+<?php
+// Update data
+$sql = "UPDATE movies
+SET title = 'The Godfather', genre = 'Crime'
+WHERE id = 2";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Data updated successfully";
+} else {
+    echo "Error updating data: " . $conn->error;
+}
+?>
+
+
+Delete Data
+
+<?php
+// Delete data
+$sql = "DELETE FROM movies
+WHERE id = 3";
+
+if ($conn->query($sql) === TRUE) {
+    echo "Data deleted successfully";
+} else {
+    echo "Error deleting data: " . $conn->error;
+}
+?>
+
+
+Close Connection
+
+<?php
+// Close connection
+$conn->close();
+?>
+
+

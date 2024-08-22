@@ -1,0 +1,71 @@
+<?php
+// Include the database connection file
+include 'dbcon.php';
+
+// Initialize an empty array to hold the movies
+$movies = [];
+
+if (isset($_POST['genre'])) {
+    $genre = $_POST['genre'];
+
+    // Prepare the SQL statement to fetch movies based on the selected genre
+    $stmt = $conn->prepare("SELECT movie_name, genre, release_year, director_name, imdb_rating 
+                            FROM movies 
+                            WHERE genre = ? 
+                            ORDER BY imdb_rating DESC");
+
+    $stmt->bind_param("s", $genre);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch all the movies and store them in the array
+    while ($row = $result->fetch_assoc()) {
+        $movies[] = $row;
+    }
+
+    $stmt->close();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Suggestions</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Movie Suggestions by Genre</h1>
+    <form method="post" action="movie_show.php">
+        <label for="genre">Select Genre:</label>
+        <select name="genre" id="genre">
+            <option value="Thriller">Thriller</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Romance">Romance</option>
+            <!-- Add more genres as needed -->
+        </select>
+        <button type="submit">Show Movies</button>
+    </form>
+
+    <?php if (!empty($movies)): ?>
+    <h2>Movies List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Movie Name</th>
+                <th>Genre</th>
+                <th>Release Year</th>
+                <th>Director Name</th>
+                <th>IMDB Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($movies as $movie): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($movie['movie_name']); ?></td>
+                <td><?php echo htmlspecialchars($movie['genre']); ?></td>
+                <td><?php echo htmlspecialchars($movie['release_year']); ?></td>
+                <td><?php echo htmlspecialchars($movie['director_name']); ?></td>
+                <td><?php echo htmlspecialchars($movie['imdb_rating']); ?></td>
+            </tr>

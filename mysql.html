@@ -1,0 +1,48 @@
+
+Create Database
+
+CREATE DATABASE mydatabase;
+
+
+Create Table
+
+CREATE TABLE movies (
+  id INT PRIMARY KEY,
+  title VARCHAR(255),
+  genre VARCHAR(100),
+  release_year INT
+);
+
+
+Insert Data
+
+INSERT INTO movies (id, title, genre, release_year)
+VALUES
+  (1, 'Inception', 'Sci-Fi', 2010),
+  (2, 'The Shawshank Redemption', 'Drama', 1994),
+  (3, 'The Dark Knight', 'Action', 2008);
+
+
+Select Data
+
+SELECT * FROM movies;
+
+
+Update Data
+
+UPDATE movies
+SET title = 'The Godfather', genre = 'Crime'
+WHERE id = 2;
+
+
+Delete Data
+
+DELETE FROM movies
+WHERE id = 3;
+
+
+Drop Table
+
+DROP TABLE movies;
+
+
